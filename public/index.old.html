@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <title>RGB LED Control with sliders</title>
+  <!-- NEW 02.03.2015 -->
+  <link rel="stylesheet" href="styles.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0" />
+  <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="MobileOptimized" content="320">
+  <!-- jQuery/jQueryUI (hosted) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css"/>
+      <style>
+    body {
+      font-family:	'Segoe UI', Verdana, Arial, Helvetica, sans-serif;
+      font-size:		62.5%;
+    }
+      </style>
+  <script src="bower_components/colorpicker/jquery.colorpicker.js"></script>
+  <link href="bower_components/colorpicker/jquery.colorpicker.css" rel="stylesheet" type="text/css"/>
+  <script src="bower_components/colorpicker/i18n/jquery.ui.colorpicker-nl.js"></script>
+  <script src="bower_components/colorpicker/swatches/jquery.ui.colorpicker-pantone.js"></script>
+  <script src="bower_components/colorpicker/parts/jquery.ui.colorpicker-rgbslider.js"></script>
+  <script src="bower_components/colorpicker/parts/jquery.ui.colorpicker-memory.js"></script>
+  <script src="bower_components/colorpicker/parsers/jquery.ui.colorpicker-cmyk-parser.js"></script>
+  <script src="bower_components/colorpicker/parsers/jquery.ui.colorpicker-cmyk-percentage-parser.js"></script>
+
+
+  <!-- #######################OLD######################### -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.16/themes/smoothness/jquery-ui.css">
+
+  <script src="script.js"></script>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+</head>
+<body class="ui-widget-content" style="border:0;">
+  <div><h1><a href="#" onclick="$.get('/rgb/000000', function() {});">OFF!</a></h1></div>
+
+  <div class="cp-events"></div>
+
+  <script>
+    $(function() {
+      var count = 0;
+
+      $('.cp-events').colorpicker({
+        init:			function(event, color) {
+                    console.log(color.formatted)
+                },
+        select:			function(event, color) {
+                  console.log('Select', color.formatted);
+                  $.get( "/rgb/"+ color.formatted , function() {});
+                },
+        close:			function(event, color) {
+                  console.log('Close', color.formatted + ' r:' + color.rgb.r + ' g:' + color.rgb.g + ' b:' + color.rgb.b + ' a:' + color.a);
+                }
+      });
+    });
+  </script>
+
+<div><h1><a href="#" onclick="$.get('/rgb/000000', function() {});">OFF!</a></h1></div>
+
+</body>
+</html>
