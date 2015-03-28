@@ -71,8 +71,13 @@
             // this is where colorpicker created
                 cp = Raphael.colorpicker(5,50, 300, "#000"),
                 cp2 = Raphael.colorwheel(5, 450, 300, "#000"),
+                    clr=Raphael.color("#000");
+            $.get("/current/", function(data, clr) {
+                    clr=Raphael.color("#"+data);
+                    console.log(clr);
+                });
+              console.log(clr);
 
-                clr = Raphael.color("#000");
 //            vr.innerHTML = clr.r;
 //            vg.innerHTML = clr.g;
 //            vb.innerHTML = clr.b;
