@@ -108,7 +108,7 @@
                     out.style.background = clr;
 		    out.style.color = Raphael.rgb2hsb(clr).b < .5 ? "#fff" : "#000";
                     clr = Raphael.color(clr);
-		    $.get( "/rgb/"+ out.value.replace("#", ""), function() {});
+		    //$.get( "/rgb/"+ out.value.replace("#", ""), function() {});
           App.socket.emit('drawClick', out.value.replace("#", "")) // Broadcast draw.
 
 		    console.log(out.value.replace("#", ""));

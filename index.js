@@ -68,6 +68,17 @@ app.get('/rgb/:value', function (req, res) {
 app.io.route('drawClick', function(req) {
     req.io.broadcast('draw', req.data);
     console.log("io.broadcast " + req.data);
+    
+    var rgbValue = req.data;
+    if( !isNaN(rgbValue = parseInt(req.data, 16) ) ){
+        var r = (rgbValue >> 16) & 255;
+        var g = (rgbValue >> 8) & 255;
+        var b = rgbValue & 255;
+    console.log("io rgb = r:" + r + " g:" + g + " b:" + b);
+        piblaster.setPwm(GREEN_GPIO_PIN, g/255);
+        piblaster.setPwm(BLUE_GPIO_PIN, b/255);
+        piblaster.setPwm(RED_GPIO_PIN, r/255);
+    };
 })
 
 app.io.route('ready', function(req) {
