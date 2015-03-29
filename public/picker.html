@@ -52,11 +52,20 @@
                           }
         </style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+	        
+	      <script src="/socket.io/socket.io.js"></script>
+
         <script src="raphael.js"></script>
         <script src="colorpicker.js"></script>
         <script src="colorwheel.js"></script>
         <script>
+        var App = {};
+        App.socket = io.connect()
         Raphael(function () {
+            
+            
+         
+
             var out = document.getElementById("output"),
 //                vr = document.getElementById("vr"),
 //                vg = document.getElementById("vg"),
@@ -73,9 +82,11 @@
                 cp2 = Raphael.colorwheel(5, 450, 300, "#000"),
                     clr=Raphael.color("#000");
             $.get("/current/", function(data, clr) {
-                    clr=Raphael.color("#"+data);
+                    cp.color("#"+data);
                     console.log(clr);
                 });
+                
+           
               console.log(clr);
 
 //            vr.innerHTML = clr.r;
@@ -98,6 +109,8 @@
 		    out.style.color = Raphael.rgb2hsb(clr).b < .5 ? "#fff" : "#000";
                     clr = Raphael.color(clr);
 		    $.get( "/rgb/"+ out.value.replace("#", ""), function() {});
+          App.socket.emit('drawClick', out.value.replace("#", "")) // Broadcast draw.
+
 		    console.log(out.value.replace("#", ""));
                 //    vr.innerHTML = clr.r;
                 //    vg.innerHTML = clr.g;
@@ -108,10 +121,32 @@
                 //    vl.innerHTML = Math.round(clr.l * 100) + "%";
                 };
             };
+             App.socket.on('draw', function (data) {
+                // body...
+                out.style.background = data;
+                cp.color("#" +data);
+                console.log("DRAW" + data);
+            }) 
             cp.onchange = onchange(cp2);
             cp2.onchange = onchange(cp);
             // that’s it. Too easy
         });
+        </script>
+       
+        <script>
+            io = io.connect()
+            
+            // Send the ready event.
+            io.emit('ready')
+            
+            // Listen for the new visitor event.
+            io.on('new visitor', function(data) {
+                $('body').append('<p>New visitor, hooray! ' + new Date().toString() +'</p>');
+                console.log(data.message);
+            })
+            io.on('talk', function(data) {
+                console.log("socket.io "+data.message)
+})  
         </script>
     </head>
     <body>

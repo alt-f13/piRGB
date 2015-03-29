@@ -1,9 +1,10 @@
 /* jshint undef: true, node: true */
 
-var express = require('express');
+var express = require('express.io');
 var piblaster = require('pi-blaster.js');
 var path = require('path');
 var app = express();
+app.http().io();
 
 var RED_GPIO_PIN = 23;
 var GREEN_GPIO_PIN = 18;
@@ -48,6 +49,7 @@ app.get('/current/', function (req, res) {
 app.get('/rgb/:value', function (req, res) {
     console.log("hex = " + req.params.value);
     current=req.params.value;
+
     var rgbValue = req.params.value;
     if( !isNaN(rgbValue = parseInt(req.params.value, 16) ) ){
         var r = (rgbValue >> 16) & 255;
@@ -63,6 +65,17 @@ app.get('/rgb/:value', function (req, res) {
     }
 });
 
+app.io.route('drawClick', function(req) {
+    req.io.broadcast('draw', req.data);
+    console.log("io.broadcast " + req.data);
+})
+
+app.io.route('ready', function(req) {
+    req.io.emit('talk', {
+        message: current
+    })
+})
+
 
 // Start listening on port 3000.
 var server = app.listen(3100, function () {
@@ -70,3 +83,5 @@ var server = app.listen(3100, function () {
     var port = server.address().port;
     console.log('RGB LED Slider listening at http://%s:%s', host, port);
 });
+
+
